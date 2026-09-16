@@ -191,7 +191,33 @@ transform: translateY(-8px);
 }
 
 .event-icon {
-font-size: 40px;
+height: 64px;
+margin: 0 auto 15px;
+color: #c49b30;
+}
+
+.event-icon svg {
+width: 64px;
+height: 64px;
+fill: none;
+stroke: currentColor;
+stroke-linecap: round;
+stroke-linejoin: round;
+stroke-width: 2;
+transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.event-card:hover .event-icon svg {
+color: #2d2925;
+transform: translateY(-4px) rotate(-2deg);
+}
+
+.event-icon path:first-child {
+stroke-width: 2.4;
+}
+
+.event-icon circle {
+fill: rgba(196, 155, 48, 0.08);
 margin-bottom: 15px;
 }
 
