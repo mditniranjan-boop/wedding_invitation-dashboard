@@ -218,6 +218,17 @@ stroke: #2d2925;
 stroke-width: 2;
 }
 
+.event-icon svg.varmala {
+color: #d4af37;
+stroke-width: 2.2;
+}
+
+.event-icon svg .varmala-flowers {
+fill: #d4af37;
+stroke: #b8952f;
+stroke-width: 1.2;
+}
+
 .event-card:hover .event-icon svg {
 color: #2d2925;
 transform: translateY(-4px) rotate(-2deg);
