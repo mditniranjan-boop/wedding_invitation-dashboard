@@ -207,6 +207,17 @@ stroke-width: 2;
 transition: transform 0.3s ease, color 0.3s ease;
 }
 
+.event-icon svg .tree {
+fill: rgba(196, 155, 48, 0.1);
+stroke-width: 2.2;
+}
+
+.event-icon svg .ganapati {
+fill: #fffaf2;
+stroke: #2d2925;
+stroke-width: 2;
+}
+
 .event-card:hover .event-icon svg {
 color: #2d2925;
 transform: translateY(-4px) rotate(-2deg);
