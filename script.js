@@ -2,7 +2,7 @@
 COUNTDOWN TIMER
 ================================ */
 
-const weddingDate = new Date("January 24, 2027 10:00:00").getTime();
+const weddingDate = new Date("January 24, 2027 11:00:00").getTime();
 
 const countdown = setInterval(function () {
 
