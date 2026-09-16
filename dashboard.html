@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding RSVP Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <main class="dashboard">
+        <section id="login-panel" class="login-panel" hidden>
+            <p class="eyebrow">PRIVATE RSVP DASHBOARD</p>
+            <h1>Admin sign in</h1>
+            <p class="subtitle">Enter the admin password to view wedding responses.</p>
+            <form id="login-form">
+                <label for="admin-password">Admin password</label>
+                <input id="admin-password" type="password" autocomplete="current-password" required>
+                <button type="submit">Sign in</button>
+            </form>
+            <p id="login-message" class="dashboard-message" role="alert"></p>
+        </section>
+
+        <section id="dashboard-content" hidden>
+        <header class="dashboard-header">
+            <div>
+                <p class="eyebrow">PRIVATE RSVP DASHBOARD</p>
+                <h1>Wedding responses</h1>
+                <p class="subtitle">Names and confirmed attendees in one place.</p>
+            </div>
+            <div class="header-actions">
+                <button id="refresh-button" type="button">Refresh</button>
+                <button id="logout-button" type="button" class="secondary-button">Sign out</button>
+            </div>
+        </header>
+
+        <section class="summary" aria-label="RSVP summary">
+            <div class="summary-item">
+                <span class="summary-label">Responses</span>
+                <strong id="response-total">0</strong>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">People attending</span>
+                <strong id="guest-total">0</strong>
+            </div>
+        </section>
+
+        <section class="responses-panel">
+            <div class="panel-heading">
+                <h2>Guest list</h2>
+                <span id="last-updated">Not loaded yet</span>
+            </div>
+            <p id="dashboard-message" class="dashboard-message" role="status"></p>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Number attending</th>
+                            <th scope="col">Submitted</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guest-list"></tbody>
+                </table>
+            </div>
+        </section>
+        </section>
+    </main>
+
+    <script>
+        const guestList = document.getElementById("guest-list");
+        const dashboardMessage = document.getElementById("dashboard-message");
+        const responseTotal = document.getElementById("response-total");
+        const guestTotal = document.getElementById("guest-total");
+        const lastUpdated = document.getElementById("last-updated");
+        const loginPanel = document.getElementById("login-panel");
+        const dashboardContent = document.getElementById("dashboard-content");
+        const loginMessage = document.getElementById("login-message");
+
+        async function checkSession() {
+            const response = await fetch("/api/admin/session");
+            const session = await response.json();
+
+            if (session.authenticated) {
+                showDashboard();
+            } else {
+                loginPanel.hidden = false;
+            }
+        }
+
+        function showDashboard() {
+            loginPanel.hidden = true;
+            dashboardContent.hidden = false;
+            loadResponses();
+        }
+
+        async function login(event) {
+            event.preventDefault();
+            loginMessage.textContent = "Signing in...";
+
+            const response = await fetch("/api/admin/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ password: document.getElementById("admin-password").value })
+            });
+
+            if (!response.ok) {
+                loginMessage.textContent = "Incorrect password.";
+                return;
+            }
+
+            document.getElementById("login-form").reset();
+            showDashboard();
+        }
+
+        async function logout() {
+            await fetch("/api/admin/logout", { method: "POST" });
+            dashboardContent.hidden = true;
+            loginPanel.hidden = false;
+            loginMessage.textContent = "You have been signed out.";
+        }
+
+        async function loadResponses() {
+            dashboardMessage.textContent = "Loading responses...";
+
+            try {
+                const response = await fetch("/api/rsvps");
+                if (response.status === 401) {
+                    dashboardContent.hidden = true;
+                    loginPanel.hidden = false;
+                    loginMessage.textContent = "Your admin session has expired.";
+                    return;
+                }
+                if (!response.ok) {
+                    throw new Error("Unable to load responses.");
+                }
+
+                const guests = await response.json();
+                guestList.replaceChildren();
+                responseTotal.textContent = guests.length;
+                guestTotal.textContent = guests.reduce((total, guest) => total + guest.count, 0);
+
+                if (guests.length === 0) {
+                    dashboardMessage.textContent = "No RSVPs have been submitted yet.";
+                } else {
+                    dashboardMessage.textContent = "";
+                    guests.forEach((guest) => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${escapeHtml(guest.name)}</td>
+                            <td>${guest.count} ${guest.count === 1 ? "person" : "people"}</td>
+                            <td>${formatDate(guest.submittedAt)}</td>
+                        `;
+                        guestList.appendChild(row);
+                    });
+                }
+
+                lastUpdated.textContent = `Updated ${new Date().toLocaleTimeString()}`;
+            } catch (error) {
+                dashboardMessage.textContent = "Could not load responses. Make sure the server is running.";
+            }
+        }
+
+        function escapeHtml(value) {
+            return String(value).replace(/[&<>'"]/g, (character) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                "'": "&#39;",
+                "\"": "&quot;"
+            }[character]));
+        }
+
+        function formatDate(value) {
+            return new Date(`${value}Z`).toLocaleString();
+        }
+
+        document.getElementById("refresh-button").addEventListener("click", loadResponses);
+        document.getElementById("logout-button").addEventListener("click", logout);
+        document.getElementById("login-form").addEventListener("submit", login);
+        checkSession();
+    </script>
+</body>
+</html>

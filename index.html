@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Our Wedding Invitation</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- HERO SECTION -->
+
+<section class="hero">
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+
+        <p class="welcome-text">TOGETHER WITH THEIR FAMILIES</p>
+
+        <h1>Jishnu K K <span>&</span> Renisha</h1>
+
+        <p class="subtitle">ARE GETTING MARRIED</p>
+
+        <p class="date">24 JANUARY 2027</p>
+
+        <div id="countdown">
+
+            <div class="time-box">
+                <span id="days">00</span>
+                <small>DAYS</small>
+            </div>
+
+            <div class="time-box">
+                <span id="hours">00</span>
+                <small>HOURS</small>
+            </div>
+
+            <div class="time-box">
+                <span id="minutes">00</span>
+                <small>MINUTES</small>
+            </div>
+
+            <div class="time-box">
+                <span id="seconds">00</span>
+                <small>SECONDS</small>
+            </div>
+
+        </div>
+
+        <button onclick="scrollToSection('story')">
+            OPEN INVITATION
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- OUR STORY -->
+
+<section id="story" class="story">
+
+    <p class="section-label">OUR STORY</p>
+
+    <h2>A Journey of Love</h2>
+
+    <p class="story-description">
+        Every love story is beautiful, but ours is our favorite.
+
+        From the moment our paths crossed, life became a journey filled with laughter,
+        memories, and countless beautiful moments.
+
+        We invite you to join us as we begin the next chapter of our forever.
+    </p>
+
+</section>
+
+
+<!-- EVENTS -->
+
+<section class="events">
+
+    <p class="section-label">CELEBRATE WITH US</p>
+
+    <h2>Wedding Events</h2>
+
+    <div class="event-container">
+
+        <div class="event-card">
+
+            <div class="event-icon">💍</div>
+
+            <h3>Engagement</h3>
+
+            <p>09 SEPTEMBER 2026</p>
+
+            <p>6:00 PM</p>
+
+            <p>Family Residence</p>
+
+            <button>LOCATION</button>
+
+        </div>
+
+
+        <div class="event-card">
+
+            <div class="event-icon">💒</div>
+
+            <h3>Wedding Ceremony</h3>
+
+            <p>24 January 2027</p>
+
+            <p>10:00 AM</p>
+
+            <p>Wedding Venue</p>
+
+            <button type="button" onclick="window.open('https://maps.app.goo.gl/AgKk4Px9rii2RLK28', '_blank', 'noopener,noreferrer')">Kochu Guruvayurappan temple, Dommasandra, Sarjapur</button>
+
+        </div>
+
+
+        <div class="event-card">
+
+            <div class="event-icon">🥂</div>
+
+            <h3>Reception</h3>
+
+            <p>12 December 2026</p>
+
+            <p>7:00 PM</p>
+
+            <p>Reception Hall</p>
+
+            <button>LOCATION</button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- GALLERY -->
+
+<section class="gallery">
+
+    <p class="section-label">MEMORIES</p>
+
+    <h2>Our Moments</h2>
+
+    <div class="gallery-grid">
+
+        <div class="gallery-item">
+            <img src="images/image1.jpg" alt="Wedding Photo">
+        </div>
+
+        <div class="gallery-item">
+            <img src="images/image2.jpg" alt="Wedding Photo">
+        </div>
+
+        <div class="gallery-item">
+            <img src="images/image3.jpg" alt="Wedding Photo">
+        </div>
+
+        <div class="gallery-item">
+            <img src="images/IMG_1167.jpg" alt="Wedding Photo">
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- RSVP -->
+
+<section class="rsvp">
+
+    <p class="section-label">Hi There</p>
+
+    <h2>Will You Join Us?</h2>
+
+    <p>Your presence would make our celebration even more special.</p>
+
+    <button type="button" onclick="showRSVP()">Yes! I will be there.</button>
+
+</section>
+
+<div id="rsvp-modal" class="rsvp-modal" role="dialog" aria-modal="true" aria-labelledby="rsvp-title" hidden>
+
+    <div class="rsvp-modal-content">
+
+        <button type="button" class="close-modal" onclick="closeRSVP()" aria-label="Close RSVP form">&times;</button>
+
+        <p class="section-label">RSVP</p>
+        <h2 id="rsvp-title">Confirm Attendance</h2>
+
+        <form id="rsvp-form" onsubmit="submitRSVP(event)">
+            <label for="guest-name">Your name</label>
+            <input id="guest-name" name="guestName" type="text" placeholder="Enter your name" required>
+
+            <label for="guest-count">Number attending</label>
+            <div class="guest-counter" aria-label="Number attending">
+                <button type="button" class="counter-button" onclick="changeGuestCount(-1)" aria-label="Remove one guest">&minus;</button>
+                <output id="guest-count-display" for="guest-count">1</output>
+                <button type="button" class="counter-button" onclick="changeGuestCount(1)" aria-label="Add one guest">+</button>
+            </div>
+            <input id="guest-count" name="guestCount" type="number" value="1" min="1" max="10" required hidden>
+
+            <button type="submit">SUBMIT RSVP</button>
+        </form>
+
+        <p id="rsvp-confirmation" class="rsvp-confirmation" role="status"></p>
+
+    </div>
+
+</div>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <h3>Jishnu K K & Renisha</h3>
+
+    <p>Forever Begins Here ❤️</p>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
