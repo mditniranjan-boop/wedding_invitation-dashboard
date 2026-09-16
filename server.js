@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs");
 const crypto = require("crypto");
 const express = require("express");
 const Database = require("better-sqlite3");
@@ -9,6 +10,7 @@ const adminPassword = process.env.ADMIN_PASSWORD || crypto.randomBytes(18).toStr
 const sessionSecret = process.env.SESSION_SECRET || crypto.randomBytes(32).toString("hex");
 const sessionDuration = 8 * 60 * 60 * 1000;
 const databasePath = process.env.DB_PATH || path.join(__dirname, "rsvps.db");
+fs.mkdirSync(path.dirname(databasePath), { recursive: true });
 const database = new Database(databasePath);
 
 database.pragma("journal_mode = WAL");
